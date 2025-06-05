@@ -3,7 +3,10 @@ const qrcode = require('qrcode-terminal');
 
 // Create client with local authentication
 const client = new Client({
-    authStrategy: new LocalAuth()
+    authStrategy: new LocalAuth(),
+    puppeteer: {
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
+    }
 });
 
 // Generate QR code for authentication
