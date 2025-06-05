@@ -1,5 +1,6 @@
 const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
+const { GeminiResponse } = require('./functions/gemini');
 require('dotenv').config();
 
 // Add at the top of bot.js
@@ -38,16 +39,45 @@ client.on('ready', async () => {
 
 // Handle incoming messages
 client.on('message', async (message) => {
-    console.log(`Message from ${message.from}: ${message.body}`);
-    console.log(message)
+    try {
+        console.log(`Message from ${message.from}: ${message.body}`);
+        
+        // Only process chat messages
+        if (message.type !== 'chat') {
+            return;
+        }
 
-    // Simple echo bot - responds to messages
-    if (message.body.toLowerCase() === 'hello') {
-        await message.reply('Hello! I am your WhatsApp bot 🤖');
-    } else if (message.body.toLowerCase() === 'ping') {
-        await message.reply('Pong! 🏓');
-    } else if (message.body.toLowerCase() === 'help') {
-        await message.reply('Available commands:\n- hello\n- ping\n- help');
+        const msg = message.body?.trim();
+        
+        // Handle empty or invalid messages
+        if (!msg) {
+            return;
+        }
+
+        // Handle status command
+        if (msg.toLowerCase() === 'status') {
+            const user = message.notifyName || message.from.split('@')[0];
+            return await message.reply(`Karibu ${user}!\n\nAcha wenge, robot inafanya kazi`);
+        }
+
+        // Process message with Gemini
+        const response = await GeminiResponse(msg);
+        
+        if (response?.status === 'success' && response.message) {
+            await message.reply(response.message);
+        } else {
+            await message.reply('Sorry, I am a chatbot and I couldnt process your message. Wait a few minute for the owner to come to help you. Thank you!');
+        }
+
+    } catch (error) {
+        console.error('Error handling message:', error);
+        
+        // Try to send error response to user if possible
+        try {
+            await message.reply('An error occurred while processing your message. Please try again.');
+        } catch (replyError) {
+            console.error('Failed to send error message to user:', replyError);
+        }
     }
 });
 
