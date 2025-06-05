@@ -1,9 +1,3 @@
-You are a helpful and friendly assistant for Shemdoe Tours, a Kilimanjaro-based tourism company. Your job is to answer questions, provide helpful information, and guide users about the services, contact options, and travel experiences offered by Shemdoe Tours.
-
-Use only the information from the knowledge base below. If the user greets, respond politely and warmly. If the user asks a question about services, prices, tours, Kilimanjaro, or cultural experiences, respond clearly and concisely based on the knowledge base. If you are unsure or the question is outside the scope of Shemdoe Tours, kindly ask the user to contact customer service.
-
-Always be polite, conversational, and avoid overly formal language unless appropriate. Respond as if you're chatting with a customer on WhatsApp. Keep your responses short and clear when possible.
-
 # KNOWLEDGE BASE
 Shemdoe Tours is a premier tourism company based in the breathtaking region of Kilimanjaro, Tanzania. Established with the goal of offering unforgettable travel experiences, Shemdoe Tours specializes in mountain trekking, wildlife safaris, cultural excursions, and eco-tourism. The company operates with a deep respect for nature, local cultures, and the individual needs of every traveler.
 
@@ -111,8 +105,40 @@ Shemdoe, the founder and managing director of Shemdoe Tours, has over a decade o
 ### Safety and Comfort
 Safety is our number one priority. All our climbing and safari equipment is regularly inspected and maintained. We conduct thorough health checks before treks, and our guides carry portable oxygen and first-aid kits. Our safari vehicles are equipped with pop-up roofs, comfortable seating, and communication devices to ensure a smooth experience.
 
-### Client Testimonials
+### 🌟 Client Testimonials
+
 Over the years, Shemdoe Tours has garnered praise from travelers around the world. Many appreciate the warm hospitality, professionalism, and attention to detail. Whether it’s a solo trekker, a honeymoon couple, or a family on safari, our clients consistently rate us highly for our exceptional service.
+
+> "Climbing Kilimanjaro with Shemdoe Tours was the experience of a lifetime. The guides were incredibly knowledgeable and supportive. I wouldn’t have made it to the summit without them!"  
+– _Emily Rogers, USA_
+
+> "Our 5-day safari through Serengeti and Ngorongoro was magical. From the big cats to the breathtaking landscapes, everything was perfectly arranged. Thank you Shemdoe for an unforgettable honeymoon!"  
+– _Carlos & Mariana Diaz, Spain_
+
+> "As a solo traveler, I was a bit nervous, but the Shemdoe team made me feel safe and included from day one. The Marangu route was scenic, and the food exceeded my expectations!"  
+– _Tariq Mahmoud, UAE_
+
+> "I booked a cultural day trip for my family, and we absolutely loved the Chagga coffee tour and Materuni waterfalls. The kids learned so much and the views were stunning. Highly recommend!"  
+– _Julia & Michael Benson, Australia_
+
+> "Shemdoe Tours handled everything from airport pickup to my 7-day Lemosho trek. They are professional, responsive, and truly care about their clients. I’ll be coming back!"  
+– _David Njoroge, Kenya_
+
+> "We had a group of six friends do the Machame Route. The porters, the pace, the meals—it was all organized so well. Our guide Elias was the best!"  
+– _Kimberly Ho, Singapore_
+
+> "We volunteered through Shemdoe’s eco-tourism program and spent three days helping at a local school. It was meaningful, well-organized, and eye-opening. Thank you for giving us this opportunity!"  
+– _Luca Bernardi, Italy_
+
+> "The attention to detail was amazing. I have dietary restrictions and Shemdoe managed everything with care. It’s rare to feel so looked after while traveling."  
+– _Fatima Zahra, Morocco_
+
+> "From the moment we landed to our final game drive in Tarangire, everything was seamless. Communication was clear, and the team was so friendly. Asante sana!"  
+– _Thomas & Ingrid Meijer, Netherlands_
+
+> "I’ve traveled a lot, but Shemdoe Tours stands out for their heart and professionalism. Their love for Tanzania shines through in everything they do."  
+– _Akira Tanaka, Japan_
+
 
 ### Location and Access
 We are conveniently located in Moshi, Kilimanjaro, just a short drive from Kilimanjaro International Airport (JRO). We offer airport pickups and transfers as part of our packages, ensuring a seamless experience from arrival to departure.
@@ -126,21 +152,70 @@ Giving back is an integral part of our philosophy. We partner with local schools
 ### Sustainability Commitment
 We aim to preserve the natural and cultural heritage of Kilimanjaro for future generations. This includes responsible waste management during treks, using eco-friendly accommodations where possible, and educating both staff and tourists on sustainable practices.
 
-### Frequently Asked Questions
-**Q: When is the best time to climb Kilimanjaro?**  
-A: The best times are January to March and June to October. These months offer the most stable weather conditions.
+### Sample Tour Prices (per person, in USD)
 
-**Q: Do I need prior climbing experience?**  
-A: No prior experience is necessary, but a good level of fitness is recommended. Our guides will support you throughout the journey.
+#### Kilimanjaro Treks
+Includes guide, meals, park fees, porters, and camping gear
+- Marangu Route (5 days) – $1,750
+- Machame Route (6 days) – $1,980
+- Lemosho Route (8 days) – $2,300
+- Rongai Route (6 days) – $1,950
 
-**Q: What gear should I bring?**  
-A: We provide a full gear checklist upon booking. Rental gear is also available.
+#### Wildlife Safaris
+Includes transport, guide, park fees, meals, and accommodation
+- 3-Day Safari (Tarangire, Ngorongoro) – $1,200
+- 5-Day Safari (Serengeti, Ngorongoro, Lake Manyara) – $1,850
+- 7-Day Big Five Safari – $2,550
 
-**Q: Is tipping expected?**  
-A: Tipping is not mandatory but is a common way to show appreciation for your guides and porters.
+#### Cultural Tours
+Prices vary depending on location and group size
+- Maasai Village Visit (Half-Day) – $90
+- Chagga Coffee Tour + Waterfalls (Full Day) – $130
+- Hadzabe Bushmen Experience (Full Day) – $170
 
-**Q: Can dietary restrictions be accommodated?**  
-A: Yes. We cater to vegetarian, vegan, gluten-free, and other dietary needs with advance notice.
+#### Day Trips & Excursions
+Transport, guide, and entry fees included
+- Materuni Waterfalls + Coffee Tour – $120
+- Kikuletwa Hot Springs – $100
+- Marangu Village Tour – $90
+
+#### Eco-Tourism & Volunteering Packages
+- 3-Day Community Experience (with homestay) – $250
+- 5-Day Environmental Conservation Tour – $420
+
+*All prices are indicative and may vary depending on season, group size, and customization. Discounts available for group bookings. Contact us for detailed quotes.*
+
+Contact: +255754920480 | Email: help@shemdoe.com | Website: https://shemdoe.com
+
+
+### 🌄 Frequently Asked Questions (FAQs) – Shemdoe Tours
+
+**Q: When is the best time to climb Mount Kilimanjaro?**  
+A: The most recommended months to climb Kilimanjaro are **January to March** and **June to October**. These periods offer the most stable weather, clearer skies, and lower chances of rainfall. While January to March is typically less crowded and slightly colder, June to October is warmer and more popular with tourists. Shemdoe Tours operates treks year-round and will help you choose the best time based on your preferences.
+
+**Q: Do I need prior mountain climbing experience?**  
+A: Not at all! Climbing Kilimanjaro doesn’t require technical climbing skills or prior high-altitude experience. However, we strongly recommend that climbers be in **good physical condition**. Our professional guides will pace the journey, monitor your health, and provide encouragement every step of the way to maximize your chances of reaching the summit safely.
+
+**Q: What gear should I bring for the climb?**  
+A: Once your booking is confirmed, Shemdoe Tours will provide you with a complete **packing checklist**, including clothing layers, hiking boots, sleeping bags, headlamps, and personal items. Don’t worry if you’re missing a few items—**rental gear** is available for items like jackets, sleeping bags, and walking poles. We prioritize your comfort and safety, so we make sure you're fully prepared before the trek begins.
+
+**Q: Is tipping required after the tour?**  
+A: Tipping is not mandatory, but it is **customary and highly appreciated** in Tanzania’s trekking and safari industries. Your guides, porters, and cooks work extremely hard to ensure a smooth and enjoyable trip. Suggested tipping guidelines are provided after booking, and you can adjust based on your satisfaction and group size.
+
+**Q: Can Shemdoe Tours accommodate special dietary needs?**  
+A: Absolutely! Our chefs can cater to various dietary requirements including **vegetarian, vegan, gluten-free, halal**, and **allergy-sensitive diets**. Please inform us during booking so we can plan your meals accordingly. Our team is trained to prepare delicious and nourishing food even at high altitudes or in remote areas.
+
+**Q: What types of tours does Shemdoe Tours offer besides Kilimanjaro climbs?**  
+A: In addition to Kilimanjaro treks, we offer a variety of **customized safaris**, **cultural tours**, and **day trips**. You can explore Serengeti, Ngorongoro Crater, Lake Manyara, Tarangire, and even take part in **Maasai village visits**, **Materuni waterfalls tours**, and **coffee experiences** with the Chagga people. Whether you're looking for wildlife, culture, or relaxation—there’s something for everyone.
+
+**Q: What’s included in the price of a Kilimanjaro or safari package?**  
+A: Packages typically include **accommodation**, **all park fees**, **meals**, **professional guides**, **porters**, and **transportation**. We also provide airport transfers and a detailed itinerary upon confirmation. Optional gear rental and personal expenses are not included unless specified.
+
+**Q: How do I book a tour with Shemdoe Tours?**  
+A: Booking is easy! Visit our website at https://shemdoe.com, send us an email at **help@shemdoe.com**, or call/WhatsApp us directly at **+255 754 920 480**. Our team will help you plan the perfect trip based on your budget, dates, and interests.
+
+**Q: What happens if I get sick or experience altitude issues?**  
+A: Our guides are **Wilderness First Aid certified** and experienced in handling altitude-related symptoms. We conduct daily health checks and can adjust your itinerary or descend early if necessary. Your safety is always our priority.
 
 ### Contact Us
 We welcome all inquiries and are happy to help you plan your dream trip to Tanzania.
