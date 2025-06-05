@@ -7,7 +7,7 @@ console.log(`This is your Gemini Key: ${GEMINI_API_KEY}`)
 const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
 const GeminiResponse = async (prompt) => {
-    const k_base = ''
+    console.log(`This is your Gemini Key: ${GEMINI_API_KEY}`)
     try {
         const response = await ai.models.generateContent({
             model: 'gemini-2.0-flash-lite',
