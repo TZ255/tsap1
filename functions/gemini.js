@@ -8,7 +8,7 @@ const GeminiResponse = async (prompt) => {
     const k_base = ''
     try {
         const response = await ai.models.generateContent({
-            model: 'gemini-2.0-flash-001',
+            model: 'gemini-2.0-flash-lite',
             contents: prompt,
         });
         console.log(response.text);
