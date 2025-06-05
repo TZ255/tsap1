@@ -47,7 +47,7 @@ const GeminiResponse = async (user_prompt) => {
         const cache = await ai.caches.create({
             model: modelName,
             config: {
-                contents: createUserContent(createPartFromUri(kb.uri, kb.mimeType)),
+                contents: [createPartFromUri(kb.uri, kb.mimeType)],
                 systemInstruction: systemInstruction,
             },
         });
