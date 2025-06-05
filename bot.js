@@ -2,6 +2,16 @@ const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 require('dotenv').config();
 
+// Add at the top of bot.js
+process.on('unhandledRejection', (reason, promise) => {
+    console.log('Unhandled Rejection at:', promise, 'reason:', reason);
+});
+
+process.on('uncaughtException', (error) => {
+    console.log('Uncaught Exception:', error);
+    process.exit(1);
+});
+
 // Create client with local authentication
 const client = new Client({
     authStrategy: new LocalAuth(),
