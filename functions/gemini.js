@@ -15,16 +15,27 @@ const GeminiResponse = async (user_prompt) => {
         //knowledge base
         const kbPath = path.join(__dirname, '../database/kb.txt') || null;
         const kb = await ai.files.upload({
-            file: kbPath, config: {mimeType: 'text/plain' }
+            file: kbPath, config: { mimeType: 'text/plain' }
         })
-        const response = await ai.models.generateContent({
-            model: 'gemini-2.0-flash-lite',
-            contents: createUserContent([
-                createPartFromUri(kb.uri, kb.mimeType),
-                user_prompt
-            ]),
+        const modelName = 'gemini-2.0-flash-lite'
+
+        //cache the knowledge base
+        const cache = await ai.caches.create({
+            model: modelName,
+            config: {
+                contents: createUserContent(createPartFromUri(kb.uri, kb.mimeType)),
+                systemInstruction: "You are a helpful and friendly assistant for Shemdoe Tours.",
+            },
         });
-        
+        console.log("Cache created:", cache);
+
+        // Generate response using the Gemini model
+        const response = await ai.models.generateContent({
+            model: modelName,
+            contents: user_prompt,
+            config: {cachedContent: cache.name}
+        });
+
         return {
             status: 'success',
             message: response.text,
