@@ -29,6 +29,7 @@ client.on('ready', async () => {
 // Handle incoming messages
 client.on('message', async (message) => {
     console.log(`Message from ${message.from}: ${message.body}`);
+    console.log(message)
 
     // Simple echo bot - responds to messages
     if (message.body.toLowerCase() === 'hello') {
@@ -46,8 +47,13 @@ client.on('auth_failure', (message) => {
 });
 
 // Handle disconnection
-client.on('disconnected', (reason) => {
+client.on('disconnected', async (reason) => {
     console.log('Client was logged out:', reason);
+    try {
+        return await client.sendMessage(process.env.SHEMDOE_NUM, 'Whatsapp bot is offline! 🤖');
+    } catch (error) {
+        console.log('Whatsapp bot is offline! 🤖');
+    }
 });
 
 // Initialize the client
