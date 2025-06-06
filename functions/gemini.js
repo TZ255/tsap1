@@ -8,21 +8,28 @@ console.log(`This is your Gemini Key: ${GEMINI_API_KEY}`)
 
 const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
+// Function to load knowledge base
+const loadKnowledgeBase = async () => {
+    try {
+        const kbPath = path.join(__dirname, '../database/kb.txt');
+        const knowledgeBase = fs.readFileSync(kbPath, 'utf8');
+        return knowledgeBase;
+    } catch (error) {
+        console.error('Error loading knowledge base:', error);
+        return null;
+    }
+};
+
 
 const GeminiResponse = async (user_prompt) => {
     try {
-        //knowledge base
-        const kbPath = path.join(__dirname, '../database/kb.txt') || null;
-        const kb = await ai.files.upload({
-            file: kbPath, config: { mimeType: 'text/plain' }
-        })
         const modelName = 'gemini-2.0-flash-lite'
 
         // Generate response using the Gemini model
         const response = await ai.models.generateContent({
             model: modelName,
             contents: user_prompt,
-            config: { systemInstruction: createPartFromUri(kb.uri, kb.mimeType) },
+            config: { systemInstruction: await loadKnowledgeBase() },
         });
 
         return {
