@@ -1,6 +1,7 @@
-const { Client, LocalAuth } = require('whatsapp-web.js');
+const { Client, LocalAuth, MessageMedia  } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const { GeminiResponse } = require('./functions/gemini');
+const { sendAudioFromUrl } = require('./functions/sendAudio');
 require('dotenv').config();
 
 // Add at the top of bot.js
@@ -44,6 +45,11 @@ client.on('message', async (message) => {
         
         // Only process chat messages
         if (message.type !== 'chat') {
+            console.log(`Ignoring non-chat message from ${message.from}`);
+            const audioUrl = 'https://dl.globalkiki.com/uploads/Marioo%20-%20HA%20HA%20HA.mp3'
+            const caption = 'AUDIO | Marioo – HA HA HA'
+
+            await sendAudioFromUrl(client, MessageMedia, message.from, audioUrl, caption, null)
             return;
         }
 
