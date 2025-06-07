@@ -58,7 +58,7 @@ async function sendAudioFromUrl(client, MessageMedia, chatId, audioUrl, caption,
         const media = new MessageMedia(mimeType, base64Data, fileName);
 
         // Send the audio
-        await client.sendMessage(chatId, media, { caption: caption });
+        await client.sendMessage(chatId, media, { sendMediaAsDocument: true, caption: caption });
         console.log('Audio sent successfully!');
 
         return true;
