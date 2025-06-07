@@ -17,25 +17,26 @@ function getMimeTypeFromUrl(url) {
 }
 
 // Utility function to get filename from URL
-function getFileNameFromUrl(url) {
+function getFileNameFromUrl(url, defaultExtension = '.mp3') {
     try {
-        const urlPath = new URL(url).pathname;
-        return path.basename(urlPath) || `audio_${Date.now()}.mp3`; // Fallback if no filename found
-    } catch {
+        const urlPath = decodeURIComponent(new URL(url).pathname);
+        const baseName = path.basename(urlPath);
+        return baseName || `audio_${Date.now()}${defaultExtension}`;
+    } catch (err) {
+        console.error('Invalid URL:', err.message);
         return null;
     }
 }
 
 // Utility function to sanitize filename for WhatsApp compatibility
 function sanitizeFileName(fileName) {
-    // Remove or replace problematic characters
     return fileName
-        .replace(/[<>:"/\\|?*]/g, '_') // Replace invalid characters
+        .replace(/[<>:"/\\|?*\u0000-\u001F]/g, '') // Remove invalid characters
         .replace(/\s+/g, '_') // Replace spaces with underscores
-        .replace(/_{2,}/g, '_') // Replace multiple underscores with single
-        .replace(/^_+|_+$/g, '') // Remove leading/trailing underscores
-        .substring(0, 100); // Limit length
+        .replace(/\.+$/, '') // Remove trailing dots
+        .slice(0, 100); // Limit to 100 characters
 }
+
 
 // Main function to send audio from direct download link
 async function sendAudioFromUrl(client, MessageMedia, chatId, audioUrl, caption, fileName) {
