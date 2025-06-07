@@ -26,6 +26,17 @@ function getFileNameFromUrl(url) {
     }
 }
 
+// Utility function to sanitize filename for WhatsApp compatibility
+function sanitizeFileName(fileName) {
+    // Remove or replace problematic characters
+    return fileName
+        .replace(/[<>:"/\\|?*]/g, '_') // Replace invalid characters
+        .replace(/\s+/g, '_') // Replace spaces with underscores
+        .replace(/_{2,}/g, '_') // Replace multiple underscores with single
+        .replace(/^_+|_+$/g, '') // Remove leading/trailing underscores
+        .substring(0, 100); // Limit length
+}
+
 // Main function to send audio from direct download link
 async function sendAudioFromUrl(client, MessageMedia, chatId, audioUrl, caption, fileName) {
     try {
@@ -50,9 +61,8 @@ async function sendAudioFromUrl(client, MessageMedia, chatId, audioUrl, caption,
         }
 
         // Generate filename if not provided
-        if (!fileName) {
-            fileName = getFileNameFromUrl(audioUrl) || 'audio.mp3';
-        }
+        let processedFileName = fileName || getFileNameFromUrl(audioUrl);
+        processedFileName = sanitizeFileName(processedFileName || `audio_${Date.now()}.mp3`);
 
         // Create MessageMedia object
         const media = new MessageMedia(mimeType, base64Data, fileName);
