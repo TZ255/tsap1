@@ -27,7 +27,7 @@ function getFileNameFromUrl(url) {
 }
 
 // Main function to send audio from direct download link
-async function sendAudioFromUrl(client, MessageMedia, chatId, audioUrl, caption = '', fileName = null) {
+async function sendAudioFromUrl(client, MessageMedia, chatId, audioUrl, caption, fileName) {
     try {
         console.log('Downloading audio from:', audioUrl);
 
