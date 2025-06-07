@@ -20,7 +20,7 @@ function getMimeTypeFromUrl(url) {
 function getFileNameFromUrl(url) {
     try {
         const urlPath = new URL(url).pathname;
-        return path.basename(urlPath) || null;
+        return path.basename(urlPath) || `audio_${Date.now()}.mp3`; // Fallback if no filename found
     } catch {
         return null;
     }
@@ -61,8 +61,9 @@ async function sendAudioFromUrl(client, MessageMedia, chatId, audioUrl, caption,
         }
 
         // Generate filename if not provided
-        let processedFileName = fileName || getFileNameFromUrl(audioUrl);
-        processedFileName = sanitizeFileName(processedFileName || `audio_${Date.now()}.mp3`);
+        let fname = fileName || getFileNameFromUrl(audioUrl);
+        let processedFileName = sanitizeFileName(fname);
+        console.log('Processed filename:', processedFileName);
 
         // Create MessageMedia object
         const media = new MessageMedia(mimeType, base64Data, processedFileName);
