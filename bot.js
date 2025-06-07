@@ -42,6 +42,7 @@ client.on('ready', async () => {
 client.on('message', async (message) => {
     try {
         console.log(`Message from ${message.from}: ${message.body}`);
+        console.log(`Message type: ${message.type}`);
         
         // Only process chat messages
         if (message.type !== 'chat') {
