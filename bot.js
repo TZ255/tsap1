@@ -1,6 +1,8 @@
 const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const { GeminiResponse } = require('./functions/gemini');
+const fs = require('fs');
+const path = require('path');
 const { sendAudioFromUrl } = require('./functions/sendAudio');
 const { postGrantVip } = require('./functions/post');
 const { sendQRToTelegram, sendMessageToTelegram } = require('./functions/sendQRCode');
@@ -98,7 +100,9 @@ client.on('message', async (message) => {
         if (msg === 'bot logout' && chatid == process.env.SHEMDOE_NUM) {
 
             await message.reply('Bot has been shutdown. Needs new QR to login again');
-            return await client.logout()
+            await client.logout()
+            await client.destroy() //shut the client tab
+            return fs.rmSync('./.wwebjs_auth', { recursive: true, force: true }); // Deletes session folder
         }
 
         if (msg.toLowerCase() === 'admin help' && chatid === process.env.SHEMDOE_NUM) {
