@@ -43,6 +43,21 @@ async function sendQRToTelegram(qrString) {
     }
 }
 
+const sendMessageToTelegram = async (chatid, msg) => {
+    try {
+        const tgAPI = `https://api.telegram.org/bot${process.env.INFO_BOT}/sendMessage`;
+        const data = {
+            chat_id: chatid,
+            text: msg
+        }
+
+        return await axios.post(tgAPI, data).catch(e => console.log(e?.message))
+    } catch (error) {
+        console.error('Error during client initialization:', error);
+    }
+}
+
 module.exports = {
-    sendQRToTelegram
+    sendQRToTelegram,
+    sendMessageToTelegram
 }

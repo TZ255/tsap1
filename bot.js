@@ -1,9 +1,9 @@
-const { Client, LocalAuth, MessageMedia  } = require('whatsapp-web.js');
+const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const { GeminiResponse } = require('./functions/gemini');
 const { sendAudioFromUrl } = require('./functions/sendAudio');
 const { postGrantVip } = require('./functions/post');
-const { sendQRToTelegram } = require('./functions/sendQRCode');
+const { sendQRToTelegram, sendMessageToTelegram } = require('./functions/sendQRCode');
 require('dotenv').config();
 
 // Add at the top of bot.js
@@ -15,6 +15,9 @@ process.on('uncaughtException', (error) => {
     console.log('Uncaught Exception:', error);
     process.exit(1);
 });
+
+//login logout programatically variable
+let isPaused = false;
 
 // Create client with local authentication
 const client = new Client({
@@ -52,14 +55,14 @@ client.on('message', async (message) => {
         const nyimboMpya = '120363401810537822@newsletter'
         const chatid = message.from
         const mk_vip = '255711935460@c.us'
-        
+
         // Only process chat messages
         if (message.type !== 'chat') {
             return;
         }
 
         const msg = message.body?.trim();
-        
+
         // Handle empty or invalid messages
         if (!msg) {
             return;
@@ -68,7 +71,7 @@ client.on('message', async (message) => {
         if (msg.toLocaleLowerCase().startsWith('grant ') && chatid === mk_vip) {
             let [email, param] = msg.split(' ').slice(1)
 
-            if(!email || !param) {
+            if (!email || !param) {
                 return await message.reply('Invalid command format. Use: grant <email> <param>');
             }
 
@@ -84,9 +87,31 @@ client.on('message', async (message) => {
             return await message.reply(`Karibu ${user}!\n\nAcha wenge, robot inafanya kazi`);
         }
 
+        //login && logout
+        if (msg === 'bot logout' && chatid == process.env.SHEMDOE_NUM) {
+            if (isPaused) {
+                return await message.reply('Bot is already paused.');
+            }
+
+            await client.destroy();
+            isPaused = true;
+            return await message.reply('Bot has been paused (destroyed).');
+        }
+
+        // Command: login
+        if (msg === 'bot login' && chatid == process.env.SHEMDOE_NUM) {
+            if (!isPaused) {
+                return await message.reply('Bot is already running.');
+            }
+
+            await client.initialize();
+            isPaused = false;
+            return await message.reply('Bot has been resumed (initialized).');
+        }
+
         // Process message with Gemini
         const response = await GeminiResponse(msg);
-        
+
         if (response?.status === 'success' && response.message) {
             await message.reply(response.message);
         } else {
@@ -95,7 +120,7 @@ client.on('message', async (message) => {
 
     } catch (error) {
         console.error('Error handling message:', error);
-        
+
         // Try to send error response to user if possible
         try {
             await message.reply('An error occurred while processing your message. Please try again.');
@@ -106,15 +131,20 @@ client.on('message', async (message) => {
 });
 
 // Handle authentication failure
-client.on('auth_failure', (message) => {
+client.on('auth_failure', async (message) => {
     console.error('Authentication failed:', message);
+    try {
+        return await sendMessageToTelegram(741815228, `WhatsApp Auth failed ❌\nReason: ${message}`)
+    } catch (error) {
+        console.log('Whatsapp bot is offline! 🤖');
+    }
 });
 
 // Handle disconnection
 client.on('disconnected', async (reason) => {
     console.log('Client was logged out:', reason);
     try {
-        return await client.sendMessage(process.env.SHEMDOE_NUM, 'Whatsapp bot is offline! 🤖');
+        return await sendMessageToTelegram(741815228, `WhatsApp Bot is Offline\nReason: ${reason}`)
     } catch (error) {
         console.log('Whatsapp bot is offline! 🤖');
     }
