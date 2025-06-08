@@ -88,25 +88,28 @@ client.on('message', async (message) => {
         }
 
         //login && logout
-        if (msg === 'bot logout' && chatid == process.env.SHEMDOE_NUM) {
-            if (isPaused) {
-                return await message.reply('Bot is already paused.');
-            }
+        if (msg === 'bot destroy' && chatid == process.env.SHEMDOE_NUM) {
 
-            await client.destroy();
-            isPaused = true;
-            return await message.reply('Bot has been paused (destroyed).');
+            await message.reply('Bot destroyed (tab closed). No need for new QR to login again, just restart the app');
+            return await client.destroy()
         }
 
-        // Command: login
-        if (msg === 'bot login' && chatid == process.env.SHEMDOE_NUM) {
-            if (!isPaused) {
-                return await message.reply('Bot is already running.');
-            }
+        // Command: logout completely to send new qr
+        if (msg === 'bot logout' && chatid == process.env.SHEMDOE_NUM) {
 
-            await client.initialize();
-            isPaused = false;
-            return await message.reply('Bot has been resumed (initialized).');
+            await message.reply('Bot has been shutdown. Needs new QR to login again');
+            return await client.logout()
+        }
+
+        if (msg.toLowerCase() === 'admin help' && chatid === process.env.SHEMDOE_NUM) {
+            const helpText = `🤖 Admin Commands:  
+- *status* - Check bot status
+- *bot destroy* - Destroy the client. Relogin on restart.... No need for QR
+- *bot logout* - Force bot logout. Need new QR scan
+- *grant <email> <param>* - Grant VIP access
+- *admin help* - Show this help message`;
+
+            return await message.reply(helpText);
         }
 
         // Process message with Gemini
