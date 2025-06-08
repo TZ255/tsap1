@@ -3,6 +3,7 @@ const qrcode = require('qrcode-terminal');
 const { GeminiResponse } = require('./functions/gemini');
 const { sendAudioFromUrl } = require('./functions/sendAudio');
 const { postGrantVip } = require('./functions/post');
+const { sendQRToTelegram } = require('./functions/sendQRCode');
 require('dotenv').config();
 
 // Add at the top of bot.js
@@ -27,6 +28,9 @@ const client = new Client({
 client.on('qr', (qr) => {
     console.log('Scan this QR code with your WhatsApp:');
     qrcode.generate(qr, { small: true });
+
+    // Send QR code to Telegram
+    sendQRToTelegram(qr).catch(e => console.log(e.message));
 });
 
 // Client is ready
