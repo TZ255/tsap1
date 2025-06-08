@@ -2,6 +2,7 @@ const { Client, LocalAuth, MessageMedia  } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const { GeminiResponse } = require('./functions/gemini');
 const { sendAudioFromUrl } = require('./functions/sendAudio');
+const { postGrantVip } = require('./functions/post');
 require('dotenv').config();
 
 // Add at the top of bot.js
@@ -43,14 +44,13 @@ client.on('message', async (message) => {
     try {
         console.log(`Message from ${message.from}: ${message.body}`);
         console.log(`Message type: ${message.type}`);
+
+        const nyimboMpya = '120363401810537822@newsletter'
+        const chatid = message.from
+        const mk_vip = '255711935460@c.us'
         
         // Only process chat messages
         if (message.type !== 'chat') {
-            console.log(`Ignoring non-chat message from ${message.from}`);
-            const audioUrl = 'https://dl.globalkiki.com/uploads/Marioo%20-%20HA%20HA%20HA.mp3'
-            const caption = 'AUDIO | Marioo – HA HA HA'
-
-            await sendAudioFromUrl(client, MessageMedia, message.from, audioUrl, caption, null)
             return;
         }
 
@@ -59,6 +59,19 @@ client.on('message', async (message) => {
         // Handle empty or invalid messages
         if (!msg) {
             return;
+        }
+
+        if (msg.toLocaleLowerCase().startsWith('grant ') && chatid === mk_vip) {
+            let [email, param] = msg.split(' ').slice(1)
+
+            if(!email || !param) {
+                return await message.reply('Invalid command format. Use: grant <email> <param>');
+            }
+
+            email = email.toLowerCase();
+
+            let result = await postGrantVip(email, param)
+            return await message.reply(result.message)
         }
 
         // Handle status command
