@@ -77,19 +77,6 @@ client.on('ready', async () => {
 HandleWhatsAppMessages(client, imp);
 
 
-
-//set interval to get the english club database
-setInterval(() => {
-    const now = new Date().toLocaleTimeString('en-GB', { timeZone: 'Africa/Nairobi' });
-    const [h, m, s] = now.split(':').map(Number);
-
-    if (h === 9 && process.env.environment !== 'local') {
-        if (m === 2) saveWordToDatabase('idiom');
-        if (m === 5) saveWordToDatabase('phrase');
-        if (m === 7) saveWordToDatabase('slang');
-    }
-}, 60000);
-
 app.get('/', (req, res) => {
     res.send('Welcome to the WhatsApp Bot API');
 });
