@@ -84,9 +84,9 @@ setInterval(() => {
     const [h, m, s] = now.split(':').map(Number);
 
     if (h === 9 && process.env.environment !== 'local') {
-        if (m === 0) saveWordToDatabase('idiom');
+        if (m === 2) saveWordToDatabase('idiom');
         if (m === 5) saveWordToDatabase('phrase');
-        if (m === 10) saveWordToDatabase('slang');
+        if (m === 7) saveWordToDatabase('slang');
     }
 }, 60000);
 

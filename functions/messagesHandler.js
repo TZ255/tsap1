@@ -9,11 +9,10 @@ const { sendQRToTelegram, sendMessageToTelegram } = require('./sendQRCode');
 require('dotenv').config();
 
 
-
-const allowedChats = [imp.shemdoe, imp.mk_vip]
-
 const HandleWhatsAppMessages = (client, imp) => {
 
+    const allowedChats = [imp.shemdoe, imp.mk_vip]
+    
     //login logout programatically variable
     let isPaused = false;
 
