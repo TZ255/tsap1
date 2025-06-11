@@ -1,3 +1,8 @@
+const express = require('express')
+const mongoose = require('mongoose')
+var cors = require('cors')
+const app = express()
+
 const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const { GeminiResponse } = require('./functions/gemini');
@@ -6,6 +11,7 @@ const path = require('path');
 const { sendAudioFromUrl } = require('./functions/sendAudio');
 const { postGrantVip } = require('./functions/post');
 const { sendQRToTelegram, sendMessageToTelegram } = require('./functions/sendQRCode');
+const { createClient } = require('./functions/createClient');
 require('dotenv').config();
 
 // Add at the top of bot.js
@@ -18,144 +24,41 @@ process.on('uncaughtException', (error) => {
     process.exit(1);
 });
 
-//login logout programatically variable
-let isPaused = false;
+// database connection
+mongoose.connect(process.env.MONGO_URI)
+    .then(() => console.log('Connected to Scraping database'))
+    .catch((err) => {
+        console.log(err)
+    })
 
-// Create client with local authentication
-const client = new Client({
-    authStrategy: new LocalAuth(),
-    puppeteer: {
-        args: ['--no-sandbox', '--disable-setuid-sandbox']
+//middleware
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+app.use(express.static(__dirname + '/public'))
+app.set('trust proxy', true)
+app.use(cors())
+
+// WHATSAPP CLIENT SETUP
+createClient();
+
+
+//set interval to get the english club database
+setInterval(() => {
+    const now = new Date().toLocaleTimeString('en-GB', { timeZone: 'Africa/Nairobi' });
+    const [h, m, s] = now.split(':').map(Number);
+
+    if (h === 9 && process.env.environment !== 'local') {
+        if (m === 0) saveWordToDatabase('idiom');
+        if (m === 5) saveWordToDatabase('phrase');
+        if (m === 10) saveWordToDatabase('slang');
     }
+}, 60000);
+
+app.get('/', (req, res) => {
+    res.send('Welcome to the WhatsApp Bot API');
 });
 
-// Generate QR code for authentication
-client.on('qr', (qr) => {
-    console.log('Scan this QR code with your WhatsApp:');
-    qrcode.generate(qr, { small: true });
 
-    // Send QR code to Telegram
-    sendQRToTelegram(qr).catch(e => console.log(e.message));
+app.listen(process.env.PORT || 3100, () => {
+    console.log(`Server is running on port ${process.env.PORT || 3100}`);
 });
-
-// Client is ready
-client.on('ready', async () => {
-    try {
-        console.log('WhatsApp bot is ready!');
-        return await client.sendMessage(process.env.SHEMDOE_NUM, 'Whatsapp bot is online! 🤖');
-    } catch (error) {
-        console.error('Error during client initialization:', error);
-    }
-});
-
-// Handle incoming messages
-client.on('message', async (message) => {
-    try {
-        console.log(`Message from ${message.from}: ${message.body}`);
-        console.log(`Message type: ${message.type}`);
-
-        const nyimboMpya = '120363401810537822@newsletter'
-        const chatid = message.from
-        const mk_vip = '255711935460@c.us'
-
-        // Only process chat messages
-        if (message.type !== 'chat') {
-            return;
-        }
-
-        const msg = message.body?.trim();
-
-        // Handle empty or invalid messages
-        if (!msg) {
-            return;
-        }
-
-        if (msg.toLocaleLowerCase().startsWith('grant ') && chatid === mk_vip) {
-            let [email, param] = msg.split(' ').slice(1)
-
-            if (!email || !param) {
-                return await message.reply('Invalid command format. Use: grant <email> <param>');
-            }
-
-            email = email.toLowerCase();
-
-            let result = await postGrantVip(email, param)
-            return await message.reply(result.message)
-        }
-
-        // Handle status command
-        if (msg.toLowerCase() === 'status') {
-            const user = message.notifyName || message.from.split('@')[0];
-            return await message.reply(`Karibu ${user}!\n\nAcha wenge, robot inafanya kazi`);
-        }
-
-        //login && logout
-        if (msg === 'bot destroy' && chatid == process.env.SHEMDOE_NUM) {
-
-            await message.reply('Bot destroyed (tab closed). No need for new QR to login again, just restart the app');
-            return await client.destroy()
-        }
-
-        // Command: logout completely to send new qr
-        if (msg === 'bot logout' && chatid == process.env.SHEMDOE_NUM) {
-
-            await message.reply('Bot has been shutdown. Needs new QR to login again');
-            await client.logout()
-            await client.destroy() //shut the client tab
-            return fs.rmSync('./.wwebjs_auth', { recursive: true, force: true }); // Deletes session folder
-        }
-
-        if (msg.toLowerCase() === 'admin help' && chatid === process.env.SHEMDOE_NUM) {
-            const helpText = `🤖 Admin Commands:  
-- *status* - Check bot status
-- *bot destroy* - Destroy the client. Relogin on restart.... No need for QR
-- *bot logout* - Force bot logout. Need new QR scan
-- *grant <email> <param>* - Grant VIP access
-- *admin help* - Show this help message`;
-
-            return await message.reply(helpText);
-        }
-
-        // Process message with Gemini
-        const response = await GeminiResponse(msg);
-
-        if (response?.status === 'success' && response.message) {
-            await message.reply(response.message);
-        } else {
-            await message.reply('Sorry, I am a chatbot and I couldnt process your message. Wait a few minute for the owner to come to help you. Thank you!');
-        }
-
-    } catch (error) {
-        console.error('Error handling message:', error);
-
-        // Try to send error response to user if possible
-        try {
-            await message.reply('An error occurred while processing your message. Please try again.');
-        } catch (replyError) {
-            console.error('Failed to send error message to user:', replyError);
-        }
-    }
-});
-
-// Handle authentication failure
-client.on('auth_failure', async (message) => {
-    console.error('Authentication failed:', message);
-    try {
-        return await sendMessageToTelegram(741815228, `WhatsApp Auth failed ❌\nReason: ${message}`)
-    } catch (error) {
-        console.log('Whatsapp bot is offline! 🤖');
-    }
-});
-
-// Handle disconnection
-client.on('disconnected', async (reason) => {
-    console.log('Client was logged out:', reason);
-    try {
-        return await sendMessageToTelegram(741815228, `WhatsApp Bot is Offline\nReason: ${reason}`)
-    } catch (error) {
-        console.log('Whatsapp bot is offline! 🤖');
-    }
-});
-
-// Initialize the client
-client.initialize();
