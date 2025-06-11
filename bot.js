@@ -11,7 +11,7 @@ const path = require('path');
 const { sendAudioFromUrl } = require('./functions/sendAudio');
 const { postGrantVip } = require('./functions/post');
 const { sendQRToTelegram, sendMessageToTelegram } = require('./functions/sendQRCode');
-const { createClient } = require('./functions/createClient');
+const { createClient, HandleWhatsAppMessages, sendMessageWhatsApp, formatEnglishClub } = require('./functions/messagesHandler');
 require('dotenv').config();
 
 // Add at the top of bot.js
@@ -31,6 +31,13 @@ mongoose.connect(process.env.MONGO_URI)
         console.log(err)
     })
 
+const imp = {
+    englishClub: "120363417496609622@newsletter",
+    shemdoe: process.env.SHEMDOE_NUM,
+    mk_vip: '255711935460@c.us',
+    nyimboMpya: '120363401810537822@newsletter'
+}
+
 //middleware
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -39,7 +46,36 @@ app.set('trust proxy', true)
 app.use(cors())
 
 // WHATSAPP CLIENT SETUP
-createClient();
+// Create client with local authentication
+const client = new Client({
+    authStrategy: new LocalAuth(),
+    puppeteer: {
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
+    }
+});
+
+// Generate QR code for authentication
+client.on('qr', (qr) => {
+    console.log('Scan this QR code with your WhatsApp:');
+    qrcode.generate(qr, { small: true });
+
+    // Send QR code to Telegram
+    sendQRToTelegram(qr).catch(e => console.log(e.message));
+});
+
+// Client is ready
+client.on('ready', async () => {
+    try {
+        console.log('WhatsApp bot is ready!');
+        return await client.sendMessage(process.env.SHEMDOE_NUM, 'Whatsapp bot is online! 🤖');
+    } catch (error) {
+        console.error('Error during client initialization:', error);
+    }
+});
+
+// Handle incoming messages
+HandleWhatsAppMessages(client, imp);
+
 
 
 //set interval to get the english club database
@@ -56,6 +92,23 @@ setInterval(() => {
 
 app.get('/', (req, res) => {
     res.send('Welcome to the WhatsApp Bot API');
+});
+
+app.post('/post/english', async (req, res) => {
+    try {
+        const wordObj = req.body;
+
+        if (!wordObj) {
+            return res.status(400).json({ message: 'Missing required fields' });
+        }
+
+        const message = await formatEnglishClub(wordObj)
+        await sendMessageWhatsApp(client, message, imp.englishClub);
+        res.status(200).json({ message: 'Word sent successfully'});
+    } catch (error) {
+        console.error('Error saving word:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
 });
 
 

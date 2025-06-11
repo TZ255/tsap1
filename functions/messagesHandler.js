@@ -8,37 +8,14 @@ const { postGrantVip } = require('./post');
 const { sendQRToTelegram, sendMessageToTelegram } = require('./sendQRCode');
 require('dotenv').config();
 
-const createClient = () => {
+
+
+const allowedChats = [imp.shemdoe, imp.mk_vip]
+
+const HandleWhatsAppMessages = (client, imp) => {
 
     //login logout programatically variable
     let isPaused = false;
-
-    // Create client with local authentication
-    const client = new Client({
-        authStrategy: new LocalAuth(),
-        puppeteer: {
-            args: ['--no-sandbox', '--disable-setuid-sandbox']
-        }
-    });
-
-    // Generate QR code for authentication
-    client.on('qr', (qr) => {
-        console.log('Scan this QR code with your WhatsApp:');
-        qrcode.generate(qr, { small: true });
-
-        // Send QR code to Telegram
-        sendQRToTelegram(qr).catch(e => console.log(e.message));
-    });
-
-    // Client is ready
-    client.on('ready', async () => {
-        try {
-            console.log('WhatsApp bot is ready!');
-            return await client.sendMessage(process.env.SHEMDOE_NUM, 'Whatsapp bot is online! 🤖');
-        } catch (error) {
-            console.error('Error during client initialization:', error);
-        }
-    });
 
     // Handle incoming messages
     client.on('message', async (message) => {
@@ -46,12 +23,10 @@ const createClient = () => {
             console.log(`Message from ${message.from}: ${message.body}`);
             console.log(`Message type: ${message.type}`);
 
-            const nyimboMpya = '120363401810537822@newsletter'
             const chatid = message.from
-            const mk_vip = '255711935460@c.us'
 
             // Only process chat messages
-            if (message.type !== 'chat') {
+            if (message.type !== 'chat' || !allowedChats.includes(chatid)) {
                 return;
             }
 
@@ -62,7 +37,7 @@ const createClient = () => {
                 return;
             }
 
-            if (msg.toLocaleLowerCase().startsWith('grant ') && chatid === mk_vip) {
+            if (msg.toLocaleLowerCase().startsWith('grant ') && chatid === imp.mk_vip) {
                 let [email, param] = msg.split(' ').slice(1)
 
                 if (!email || !param) {
@@ -153,5 +128,52 @@ const createClient = () => {
     client.initialize();
 }
 
-module.exports = { createClient };
+const sendMessageWhatsApp = async (client, message, chatId) => {
+    try {
+        await client.sendMessage(chatId, message);
+    } catch (error) {
+        console.error('Error sending message:', error);
+        sendMessageToTelegram(741815228, `Error sending message to WhatsApp: ${error.message}`);
+    }
+}
+
+const formatEnglishClub = async (wordObj) => {
+    try {
+        const { type, term, meaning, examples, challenge } = wordObj;
+
+        if (!type || !term || !meaning || !examples || !challenge) {
+            throw new Error('Missing required fields');
+        }
+
+        return `🌟 *${type.toUpperCase()} of the Day* 🌟  
+*🗣️ "${term}"*
+
+📘 *Meaning:*  
+> ${meaning.english}
+
+🇹🇿 *Swahili:*  
+> ${meaning.swahili}
+
+✍️ *Example Sentences:*
+
+1). ${examples[0].en}
+> 🇹🇿 ${examples[0].sw}
+
+2). ${examples[1].en}
+> 🇹🇿 ${examples[1].sw}
+
+3). ${examples[2].en}
+> 🇹🇿 ${examples[2].sw}
+
+
+💬 *Challenge for Today:*  
+> ${challenge.text}`;
+
+    } catch (error) {
+        console.error('Error sending message:', error);
+        sendMessageToTelegram(741815228, `Error sending message to WhatsApp: ${error.message}`);
+    }
+}
+
+module.exports = { HandleWhatsAppMessages, sendMessageWhatsApp, formatEnglishClub };
 // This function creates and initializes a WhatsApp client using the whatsapp-web.js library.
