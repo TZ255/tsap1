@@ -12,7 +12,7 @@ require('dotenv').config();
 const HandleWhatsAppMessages = (client, imp) => {
 
     const allowedChats = [imp.shemdoe, imp.mk_vip]
-    
+
     //login logout programatically variable
     let isPaused = false;
 
@@ -36,8 +36,11 @@ const HandleWhatsAppMessages = (client, imp) => {
                 return;
             }
 
-            if (msg.toLocaleLowerCase().startsWith('grant ') && chatid === imp.mk_vip) {
-                let [email, param] = msg.split(' ').slice(1)
+            if (msg.toLocaleLowerCase().startsWith('grant ') || msg.toLocaleLowerCase().startsWith('/grant ') && chatid === imp.mk_vip) {
+                let match = String(msg.toLowerCase().split('grant ')[1]).toLowerCase().trim()
+                if (match.includes('mail: ')) match = match.split('mail: ')[1];
+
+                let [email, param] = match.split(' ')
 
                 if (!email || !param) {
                     return await message.reply('Invalid command format. Use: grant <email> <param>');
