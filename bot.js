@@ -75,6 +75,8 @@ client.on('ready', async () => {
 
 // Handle incoming messages
 HandleWhatsAppMessages(client, imp);
+// Initialize the client
+client.initialize();
 
 
 app.get('/', (req, res) => {
@@ -91,7 +93,7 @@ app.post('/post/english', async (req, res) => {
 
         const message = await formatEnglishClub(wordObj)
         await sendMessageWhatsApp(client, message, imp.englishClub);
-        res.status(200).json({ message: 'Word sent successfully'});
+        res.status(200).json({ message: 'Word sent successfully' });
     } catch (error) {
         console.error('Error saving word:', error);
         res.status(500).json({ message: 'Internal server error' });

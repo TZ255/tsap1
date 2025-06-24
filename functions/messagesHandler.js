@@ -125,9 +125,6 @@ const HandleWhatsAppMessages = (client, imp) => {
             console.log('Whatsapp bot is offline! 🤖');
         }
     });
-
-    // Initialize the client
-    client.initialize();
 }
 
 const sendMessageWhatsApp = async (client, message, chatId) => {
